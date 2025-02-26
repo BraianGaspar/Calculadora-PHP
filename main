@@ -1,0 +1,78 @@
+<?php
+declare(strict_types = 1);
+
+namespace App;
+
+class Calculadora {
+
+    public function menuDados() {
+        echo 'Informe quantos valores você deseja utilizar: ';
+        $quantidade = fgets(STDIN);
+        $quantidade = trim($quantidade); 
+
+        if (!is_numeric($quantidade) || $quantidade <= 0) {
+            echo "Quantidade inválida. Informe um número maior que zero.\n";
+            return;
+        }
+
+        $valores = [];
+        echo "Informe os valores:\n";
+        for ($i = 0; $i < $quantidade; $i++) {
+            echo "Valor " . ($i + 1) . ": ";
+            $valor = fgets(STDIN); 
+            $valor = trim($valor); 
+            if (is_numeric($valor)) {
+                $valores[] = (float) $valor;
+            } else {
+                echo "Valor inválido. Por favor, insira um número.\n";
+                $i--;
+            }
+        }
+
+        if (!$this->validacoes($valores)) {
+            return;
+        }
+
+        $this->calcular($valores);
+    }
+
+    static function formatarDados(array $valores): array {
+        // Não há necessidade de 'explode' neste caso, apenas para exemplo
+        return $valores;
+    }
+
+    private function validacoes(array $valores): bool {
+        if (count($valores) <= 1) {
+            echo 'Informe mais valores.\n';
+            return false;
+        }
+        return true;
+    }
+
+    private function calcular(array $valores) {
+        $soma = 0;
+        $multiplicacao = 1; 
+        $divisao = $valores[0]; 
+        $subtracao = $valores[0]; 
+        $media = 0;
+
+        foreach ($valores as $valor) {
+            $soma += $valor;
+            $multiplicacao *= $valor;
+            $subtracao -= $valor;
+            $divisao /= $valor;
+        }
+
+        $media = $soma / count($valores);
+        
+        
+        echo "Soma: $soma\n";
+        echo "Multiplicação: $multiplicacao\n";
+        echo "Subtração: $subtracao\n";
+        echo "Divisão: $divisao\n";
+        echo "Média: $media\n";
+    }
+}
+
+$calculadora->menuDados();
+?>
